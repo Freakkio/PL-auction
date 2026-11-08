@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>PL Auction</title>
+<style>
+:root{--bg:#f4f1fb;--c:#fff;--t:#1d1030;--m:#6b5f80;--a:#7b2cbf;--g:#1a9d55;--b:#ddd4ee;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150b24;--c:#22143a;--t:#f2ecff;--m:#a99bc4;--a:#c084fc;--b:#3a2860;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#150b24;--c:#22143a;--t:#f2ecff;--m:#a99bc4;--a:#c084fc;--b:#3a2860;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--t);font:15px system-ui,sans-serif;padding:12px}
+h1{font-size:20px;margin:0 0 8px}h2{margin:4px 0;font-size:30px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:12px;margin-bottom:10px}
+label{display:block;margin:8px 0}input,select{font:inherit;padding:6px;margin-left:6px;border-radius:6px;border:1px solid var(--b);background:var(--bg);color:var(--t);max-width:100%}
+button{font:inherit;font-weight:600;padding:10px 14px;border:0;border-radius:8px;background:var(--a);color:#fff;cursor:pointer}
+button:disabled{opacity:.35;cursor:not-allowed}
+.lot{text-align:center}.pos{background:var(--a);color:#fff;border-radius:6px;padding:2px 8px;font-weight:700}
+.big{font-size:22px;font-weight:700}.tm{font-size:44px;font-weight:800;color:var(--a)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.bb{width:100%;padding:18px 10px;font-size:17px;touch-action:manipulation}ul{padding-left:18px;margin:6px 0;color:var(--m)}li b{color:var(--t)}
+.win{border:2px solid var(--g)}.top{display:flex;justify-content:space-between;align-items:center}
+</style></head><body><div id="app"></div>
+<script>
+const D=`G|Peter Schmeichel:90,Petr Cech:90,Edwin van der Sar:88,David Seaman:85,David de Gea:88,Alisson:90,Ederson:88,Thibaut Courtois:90,Hugo Lloris:85,Joe Hart:82,Pepe Reina:82,Jordan Pickford:82,Emiliano Martinez:86,David Raya:84,Kasper Schmeichel:80
+D|John Terry:90,Rio Ferdinand:89,Nemanja Vidic:90,Vincent Kompany:88,Sol Campbell:86,Tony Adams:86,Jaap Stam:86,Ashley Cole:88,Patrice Evra:86,Gary Neville:82,Pablo Zabaleta:82,Branislav Ivanovic:82,Laurent Koscielny:83,Per Mertesacker:80,Virgil van Dijk:91,Trent Alexander-Arnold:88,Andy Robertson:87,Kyle Walker:86,Ruben Dias:89,John Stones:85,Gabriel Magalhaes:86,William Saliba:88,Harry Maguire:80,Antonio Rudiger:85,Reece James:84,Cesar Azpilicueta:82,Leighton Baines:80,Ben White:80,Joe Gomez:78
+M|Steven Gerrard:92,Frank Lampard:91,Paul Scholes:90,Roy Keane:91,Patrick Vieira:91,Cesc Fabregas:90,David Silva:90,Kevin De Bruyne:95,Paul Pogba:86,Ngolo Kante:89,Rodri:92,Bruno Fernandes:89,Martin Odegaard:89,Declan Rice:87,Alexis Mac Allister:85,Jordan Henderson:82,Yaya Toure:90,Michael Essien:87,Claude Makelele:86,Xabi Alonso:88,David Beckham:90,Ryan Giggs:90,Mesut Ozil:87,Juan Mata:83,Joe Cole:82,Bernardo Silva:89,Phil Foden:88,Bukayo Saka:88,Jack Grealish:84,Fernandinho:85,Casemiro:86,Riyad Mahrez:86,Robert Pires:87,Philippe Coutinho:83,Cole Palmer:87
+F|Cristiano Ronaldo:94,Thierry Henry:94,Wayne Rooney:91,Sergio Aguero:91,Didier Drogba:90,Mohamed Salah:93,Erling Haaland:94,Harry Kane:91,Son Heung-min:87,Luis Suarez:90,Fernando Torres:88,Ruud van Nistelrooy:90,Alan Shearer:90,Michael Owen:86,Eric Cantona:90,Dennis Bergkamp:90,Ian Wright:85,Eden Hazard:91,Raheem Sterling:83,Sadio Mane:89,Roberto Firmino:84,Pierre-Emerick Aubameyang:86,Romelu Lukaku:84,Carlos Tevez:86,Dimitar Berbatov:84,Robbie Fowler:84,Andy Cole:83,Dwight Yorke:85,Jamie Vardy:83,Marcus Rashford:84,Diogo Jota:83,Gabriel Jesus:82,Alexander Isak:86,Ole Gunnar Solskjaer:82,Gabriel Martinelli:80`;
+const P=[];D.split("\n").forEach(l=>{const[p,s]=l.split("|");s.split(",").forEach(x=>{const[n,r]=x.split(":");P.push({n,p,r:+r})})});
+const ST=`252:128,494:202,313:122,344:141,415:141,270:100,290:125,154:67,357:118,348:107,285:106,330:100,210:75,190:75,270:80,492:41:8,455:7:6,205:21:4,265:20:8,315:11:4,255:12:6,79:2:2,385:10:40,273:5:24,400:5:30,328:6:20,276:22:30,270:21:9,190:4:5,330:30:20,240:15:64,330:5:62,450:7:35,190:5:5,270:11:5,200:14:6,140:8:3,300:14:10,140:7:4,140:10:15,350:7:27,420:36:65,170:6:9,200:1:6,504:120:92,609:177:102,499:107:55,366:33:30,307:29:34,350:55:111,309:60:93,295:68:120,145:29:31,217:5:12,220:25:22,240:75:75,170:28:30,340:22:25,190:17:14,440:33:55,230:59:40,160:17:10,144:2:6,144:6:13,265:62:80,632:109:162,184:33:54,300:50:60,300:36:30,270:40:50,220:60:38,240:60:60,270:30:50,260:15:20,100:17:12,290:75:58,189:62:48,150:41:30,120:45:22,236:103:32,258:175:74,491:208:103,275:184:47,254:104:40,310:190:92,125:110:22,320:213:49,333:127:80,110:69:39,213:91:33,150:95:17,441:260:64,326:150:31,143:70:56,315:87:94,213:113:47,245:110:92,400:130:90,270:120:48,300:80:50,97:68:20,330:120:43,150:66:30,210:94:40,369:163:50,414:187:73,232:77:40,390:143:55,350:90:50,130:50:18,230:77:40,100:50:10,235:91:28,190:50:28`.split(",");
+P.forEach((p,i)=>{if(ST.length==P.length)p.st=ST[i].split(":").map(Number)});
+const K=['q','p','z','m','g','h'],PN={G:'GK',D:'DEF',M:'MID',F:'FWD'},$=id=>document.getElementById(id),app=$('app');
+let S=null,tm=null;
+function setup(){
+ S=null;clearInterval(tm);
+ app.innerHTML=`<h1>⚽ PL Auction</h1><div class="card"><label>Bidders<select id="nb">${[2,3,4,5,6].map(x=>`<option ${x==4?'selected':''}>${x}</option>`).join('')}</select></label>
+ <label>Format<select id="sz"><option value="5">5-a-side</option><option value="7">7-a-side</option><option value="11" selected>11-a-side</option><option value="16">Full squad (15+1)</option></select></label>
+ <label>Budget each<input id="bg" type="number" min="10" value="110"></label><label>Timer (sec)<input id="ts" type="number" min="5" value="30"></label><div id="nm"></div><button id="go">Start auction</button>
+ <p style="color:var(--m)">Each tap or click = +1 bid (works on phone too). Timer resets after every bid. Stats are approximate PL career numbers. 1 GK minimum (2 in full squad).</p></div>`;
+ const names=()=>{$('nm').innerHTML=[...Array(+$('nb').value)].map((_,i)=>`<label>Player ${i+1}<input id="n${i}" placeholder="Name"></label>`).join('')};
+ names();$('nb').onchange=names;$('sz').onchange=()=>$('bg').value=$('sz').value*10;$('go').onclick=start;
+}
+function start(){
+ const n=+$('nb').value,size=+$('sz').value,B=+$('bg').value||size*10;
+ S={tt:+$('ts').value||30,n,size,T:[...Array(n)].map((_,i)=>({name:$('n'+i).value.trim()||'Player '+(i+1),b:B,sq:[]})),pool:[...P].sort(()=>Math.random()-.5),cur:null,bid:0,lead:-1,t:10,ph:'lot',msg:''};
+ next();tm=setInterval(tick,1000);
+}
+function can(i){
+ const t=S.T[i],c=S.cur,left=S.size-t.sq.length;
+ if(!c||S.ph!='lot'||left<1||S.lead==i)return 0;
+ const g=t.sq.filter(x=>x.p=='G').length,need=Math.max(0,(S.size==16?2:1)-g);
+ if(t.b-(S.bid+1)<left-1)return 0;
+ if(c.p=='G')return g<(S.size==16?3:2)?1:0;
+ return left-1>=need?1:0;
+}
+function next(){
+ if(S.T.every(t=>t.sq.length>=S.size)||!S.pool.length)return end();
+ S.cur=S.pool.pop();S.bid=0;S.lead=-1;S.t=S.tt;S.ph='lot';
+ if(!S.T.some((_,i)=>can(i))){S.msg='⏭ '+S.cur.n+' skipped (nobody can take him)';return next()}
+ render();
+}
+function placeBid(i){if(!S||!can(i))return;S.bid++;S.lead=i;S.t=S.tt;render()}
+function tick(){if(S.ph!='lot')return;S.t--;if(S.t<=0)sell();else render()}
+function sell(){
+ S.ph='sold';
+ if(S.lead>=0){const t=S.T[S.lead];t.b-=S.bid;t.sq.push({...S.cur,pr:S.bid});S.msg=`✅ ${S.cur.n} → ${t.name} for ${S.bid}`}
+ else S.msg=`❌ ${S.cur.n} unsold`;
+ render();setTimeout(next,1500);
+}
+function render(){
+ const c=S.cur;
+ app.innerHTML=`<div class="top"><h1>⚽ PL Auction</h1><span>${S.pool.length} players left</span></div>
+ <div class="card lot"><span class="pos">${PN[c.p]}</span><h2>${c.n}</h2><div>Rating ${c.r}</div>${c.st?`<div style="color:var(--m)">PL career ≈ ${c.st[0]} apps · ${c.p=='G'?c.st[1]+' clean sheets':c.st[1]+' goals · '+c.st[2]+' assists'}</div>`:''}
+ <div class="big">${S.bid?`Bid ${S.bid} · ${S.T[S.lead].name}`:'No bids yet'}</div><div class="tm">${S.ph=='lot'?S.t+'s':'SOLD'}</div>
+ <div>${S.msg}</div>${S.ph=='lot'?`<button onclick="sell()">${S.bid?'Sell now':'Skip player'}</button>`:''}</div>
+ <div class="g">${S.T.map((t,i)=>`<div class="card"><button class="bb" ${can(i)?'':'disabled'} onclick="placeBid(${i})">${t.name} · BID ${S.bid+1}</button>
+ <div style="margin-top:6px">💰 ${t.b} left · ${t.sq.length}/${S.size}</div><ul>${t.sq.map(x=>`<li>${PN[x.p]} ${x.n} <b>${x.pr}</b></li>`).join('')}</ul></div>`).join('')}</div>`;
+}
+function score(t){
+ const f={5:[2,1,1],7:[2,3,1],11:[4,4,2],16:[4,4,2]}[S.size],sq=[...t.sq].sort((a,b)=>b.r-a.r),xi=[],u=new Set();let s=0;
+ const add=(x,w)=>{xi.push(x);u.add(x);s+=x.r*w};
+ const gk=sq.find(x=>x.p=='G');if(gk)add(gk,1);
+ ['D','M','F'].forEach((p,k)=>sq.filter(x=>x.p==p&&!u.has(x)).slice(0,f[k]).forEach(x=>add(x,1)));
+ const need=S.size==16?11:S.size;
+ sq.filter(x=>!u.has(x)&&x.p!='G').slice(0,Math.max(0,need-xi.length)).forEach(x=>add(x,.85));
+ const bench=sq.filter(x=>!u.has(x));s+=bench.reduce((a,x)=>a+x.r*.2,0);
+ return{t,xi,bench,s:Math.round(s*10)/10};
+}
+function end(){
+ clearInterval(tm);
+ const R=S.T.map(score).sort((a,b)=>b.s-a.s);
+ app.innerHTML=`<h1>🏆 Final result</h1><div class="card win"><div class="big">Winner: ${R[0].t.name}</div><div>Team score ${R[0].s}</div></div>
+ ${R.map((r,i)=>`<div class="card ${i?'':'win'}"><div class="big">#${i+1} ${r.t.name} · ${r.s} pts</div><div style="color:var(--m)">Unspent: ${r.t.b} · Squad ${r.t.sq.length}/${S.size}</div>
+ <p><b>Starting lineup</b><br>${r.xi.map(x=>`${PN[x.p]} ${x.n} (${x.r})`).join('<br>')}</p>
+ ${r.bench.length?`<p><b>Bench</b><br>${r.bench.map(x=>`${PN[x.p]} ${x.n} (${x.r}) · bought ${x.pr}`).join('<br>')}</p>`:''}</div>`).join('')}
+ <p style="color:var(--m)">Score = sum of starting lineup ratings (best GK, then best players per position, out-of-position ×0.85) plus a small bench bonus.</p><button onclick="setup()">New auction</button>`;
+}
+
+setup();
+</script></body></html>
